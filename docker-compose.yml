@@ -1,5 +1,10 @@
 version: "3.8"
 
+# Add this at the top level (same level as services)
+x-buildkit: &buildkit
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
 # Security Note: The ollama service has internet access to download models from registry.ollama.ai
 # The open-webui service is isolated from the internet but can communicate with ollama
 # For maximum security, consider downloading models manually and removing internet access
@@ -7,7 +12,7 @@ version: "3.8"
 services:
   ollama:
     build:
-      context: ./ollama/Dockerfile
+      context: ./ollama
       dockerfile: Dockerfile
     container_name: ollama
     ports:

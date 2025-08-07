@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy and set permissions for startup script
-COPY ./ollama/container-start.sh /app/container-start.sh
+COPY container-start.sh /app/container-start.sh
 RUN chmod +x /app/container-start.sh
 
 # Override the entrypoint and run the startup script

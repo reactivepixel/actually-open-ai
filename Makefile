@@ -1,4 +1,4 @@
-.PHONY: help start stop purge setup-nvidia status logs tail
+.PHONY: help start stop purge setup-nvidia status logs tail nuke
 
 # Default target
 help:
@@ -9,6 +9,7 @@ help:
 	@echo "  make status    - Show container status"
 	@echo "  make logs      - Show container logs"
 	@echo "  make tail      - Follow container logs in real-time (Ctrl+C to stop)"
+	@echo "  make nuke      - ☢️  Remove ALL Docker resources (affects ALL projects!)"
 
 # Start containers (runs NVIDIA setup on first run)
 start:
@@ -56,9 +57,24 @@ tail:
 	docker-compose logs -f
 
 # Nuclear option - remove ALL Docker resources (use with caution)
-nuclear:
+nuke:
 	@echo "☢️  WARNING: This will remove ALL Docker containers, images, networks, and volumes!"
 	@echo "This affects ALL projects, not just this one."
 	@read -p "Are you sure? (type 'yes' to continue): " confirm && [ "$$confirm" = "yes" ]
-	docker system prune -a --volumes -f
-	@echo "☢️  Nuclear cleanup complete!"
+	@echo "🛑 Stopping all running containers..."
+	-docker stop $$(docker ps -q) 2>/dev/null || true
+	@echo "🗑️  Removing all containers..."
+	-docker rm $$(docker ps -aq) 2>/dev/null || true
+	@echo "🗑️  Removing all images..."
+	-docker rmi $$(docker images -q) -f 2>/dev/null || true
+	@echo "🗑️  Removing all volumes..."
+	-docker volume rm $$(docker volume ls -q) 2>/dev/null || true
+	@echo "🗑️  Removing all networks..."
+	-docker network rm $$(docker network ls -q) 2>/dev/null || true
+	@echo "🗑️  Removing all build cache..."
+	-docker builder prune -a -f 2>/dev/null || true
+	@echo "🗑️  Final system prune..."
+	-docker system prune -a --volumes -f 2>/dev/null || true
+	@echo "🧹 Removing project setup marker..."
+	-rm -f .nvidia-setup-done 2>/dev/null || true
+	@echo "☢️  Nuclear cleanup complete! Docker is now completely clean."
