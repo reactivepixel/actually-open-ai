@@ -6,15 +6,12 @@ OpenAI's Openweighted model running on Ollama inside a container with another co
 
 Prereqs:
 
+- Windows: Run in a WSL Container
 - Using an nvidia GPU (optional - will fall back to CPU if not available)
 - [Docker](https://www.docker.com/products/docker-desktop/)
 - Make (usually pre-installed on Linux/Mac)
 
-```bash
-make start                                               # First run: sets up NVIDIA Docker + starts containers
-                                                        # Subsequent runs: just starts containers
-                                                        # Wait for the 13+ GB download to complete
-```
+`make start`
 
 Then go to [localhost:3000](http://localhost:3000)
 
