@@ -1,4 +1,9 @@
 version: "3.8"
+
+# Security Note: The ollama service has internet access to download models from registry.ollama.ai
+# The open-webui service is isolated from the internet but can communicate with ollama
+# For maximum security, consider downloading models manually and removing internet access
+
 services:
   ollama:
     build:
@@ -20,6 +25,8 @@ services:
     environment:
       - OLLAMA_HOST=0.0.0.0:11434
       - OLLAMA_KEEP_ALIVE=24h
+    dns:
+      - 8.8.8.8
     restart: unless-stopped
     networks:
       - ollama-network
@@ -35,8 +42,6 @@ services:
       - OLLAMA_BASE_URLS=http://ollama:11434
       - WEBUI_AUTH=False
       - WEBUI_NAME=GPT-OSS-WebUI
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on:
       - ollama
     restart: unless-stopped
@@ -46,6 +51,9 @@ services:
 networks:
   ollama-network:
     driver: bridge
+    internal: false
+    driver_opts:
+      com.docker.network.bridge.name: ollama-br0
 
 volumes:
   ollama_data:
