@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy and set permissions for startup script
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+COPY ./ollama/container-start.sh /app/container-start.sh
+RUN chmod +x /app/container-start.sh
 
 # Override the entrypoint and run the startup script
-ENTRYPOINT ["/bin/sh", "/app/start.sh"]
+ENTRYPOINT ["/bin/sh", "/app/container-start.sh"]

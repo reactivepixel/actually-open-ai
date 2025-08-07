@@ -4,13 +4,28 @@ OpenAI's Openweighted model running on Ollama inside a container with another co
 
 ## Getting Started
 
-Install Docker if not yet installed.
+Prereqs:
+
+- Using an nvidia GPU (optional - will fall back to CPU if not available)
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- Make (usually pre-installed on Linux/Mac)
 
 ```bash
-docker-compose up                           # wait for the 50 or so Gigs to download. Once completed
-<ctrl-c>
-docker-compose down
-docker-compose up -d
+make start                                               # First run: sets up NVIDIA Docker + starts containers
+                                                        # Subsequent runs: just starts containers
+                                                        # Wait for the 13+ GB download to complete
 ```
 
 Then go to [localhost:3000](http://localhost:3000)
+
+## Available Commands
+
+```bash
+make help      # Show all available commands
+make start     # Start containers (setup NVIDIA on first run)
+make stop      # Stop containers
+make status    # Show container status
+make logs      # Show container logs
+make purge     # Remove all project containers/images/volumes
+make nuclear   # ⚠️  Remove ALL Docker resources (affects other projects)
+```

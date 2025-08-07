@@ -2,7 +2,7 @@ version: "3.8"
 services:
   ollama:
     build:
-      context: .
+      context: ./ollama/Dockerfile
       dockerfile: Dockerfile
     container_name: ollama
     ports:
