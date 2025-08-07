@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./modelfiles:/app/modelfiles
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_KEEP_ALIVE=24h
+    restart: unless-stopped
+    networks:
+      - ollama-network
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    volumes:
+      - openwebui_data:/app/backend/data
+    environment:
+      - OLLAMA_BASE_URLS=http://ollama:11434
+      - WEBUI_AUTH=False
+      - WEBUI_NAME=GPT-OSS-WebUI
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - ollama-network
+
+networks:
+  ollama-network:
+    driver: bridge
+
+volumes:
+  ollama_data:
+  openwebui_data:
