@@ -11,6 +11,8 @@ Prereqs:
 - [Docker](https://www.docker.com/products/docker-desktop/)
 - Make (usually pre-installed on Linux/Mac)
 
+Start Everything (and install all other components, Takes awhile for first run)
+
 `make start`
 
 Then go to [localhost:3000](http://localhost:3000)
