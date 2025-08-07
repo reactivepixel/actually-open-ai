@@ -1,5 +1,3 @@
-# Quick and Dirty Instructions
-
 OpenAI's Openweighted model running on Ollama inside a container with another container running open-webui for a chat like ui feel.
 
 ## Getting Started
