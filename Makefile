@@ -1,4 +1,4 @@
-.PHONY: help start stop purge setup-nvidia status
+.PHONY: help start stop purge setup-nvidia status logs tail
 
 # Default target
 help:
@@ -8,6 +8,7 @@ help:
 	@echo "  make purge     - Stop and remove all containers, images, volumes, networks"
 	@echo "  make status    - Show container status"
 	@echo "  make logs      - Show container logs"
+	@echo "  make tail      - Follow container logs in real-time (Ctrl+C to stop)"
 
 # Start containers (runs NVIDIA setup on first run)
 start:
@@ -48,6 +49,11 @@ status:
 logs:
 	@echo "📜 Container Logs:"
 	docker-compose logs --tail=50
+
+# Follow container logs in real-time
+tail:
+	@echo "📜 Following container logs (Ctrl+C to stop):"
+	docker-compose logs -f
 
 # Nuclear option - remove ALL Docker resources (use with caution)
 nuclear:
